@@ -2,7 +2,7 @@
 
 import pygame
 import math
-import random
+import random   
 
 pygame.init() # initialisation du module "pygame"
 pygame.mixer.init() #son
@@ -31,7 +31,8 @@ def jouer():
     infanterie=pygame.mixer.Sound("baionnette.wav")
     score=0
     nbproj=100
-    projectile=[]
+    projectile=[(-1,-1) for i in range(nbproj)]
+    ajout=False
     joueur=(475,700)
     L=[]
     tir=False
@@ -85,7 +86,6 @@ def jouer():
                 "Vitesse de l'ennemie -> 3",
                 "Niveau Difficile: Vie du cavalier -> 40 / Vie du soldat de la garde -> 15 / Son nombre de balles -> 50",
                 "Vitesse de l'ennemie -> 5",
-
             ]
             i=0
             for ligne in regles:
@@ -99,9 +99,7 @@ def jouer():
                 fenetre.blit(texte_bouton, texte_rect)
             pygame.display.flip()
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     for nom, rect in boutons.items():
                         if rect.collidepoint(event.pos):
                             difficulte = nom
@@ -113,7 +111,6 @@ def jouer():
 
     def bataille():
         fenetre.fill((85, 135, 60))
-        
         for i in range(len(arbres)):
             pygame.draw.circle(fenetre,(34,85,28),arbres[i],7)
         pygame.draw.rect(fenetre, (210, 180, 140), (425, 0, 150, 1000)) #chemin
@@ -152,7 +149,7 @@ def jouer():
             else:
                 fenetre.blit(anglais,ennemie[i]) #ennemie
         s=arial24.render("Score : "+ str(score),True,(0,0,0))
-        fenetre.blit(s,(450,50))
+        fenetre.blit(s,(450,80))
         pygame.display.flip()
     
     clock = pygame.time.Clock()
@@ -249,7 +246,7 @@ def jouer():
         if difficulte!=None:
             continuer=1
             break
-    # ici on va mettre les parametres pour facile/moyen/difficile
+   #Les parametres pour facile/moyen/difficile
     vjoueur=5
     viecav=70
     viegarde=30
@@ -269,13 +266,8 @@ def jouer():
         viecav=40
         viegarde=15
         nbproj=50
-    projectile=[(-1,-1) for i in range(nbproj)]
-    ajout=False
 
     while continuer:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                continuer = 0
         bataille()
         deplacementjoueur()
         deplacementennemi()
@@ -357,13 +349,10 @@ def gameover(score):
         fenetre.blit(texte_record, (425, 400))
         fenetre.blit(texte_bouton, texte_rect)
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                continuer=0
-                restart = True
-            elif event.type == pygame.MOUSEBUTTONDOWN and bouton_restart.collidepoint(event.pos):
+            if event.type == pygame.MOUSEBUTTONDOWN and bouton_restart.collidepoint(event.pos):
                 restart = True
         pygame.display.flip()
-score=0
+
 
 while True:
     score=jouer()
